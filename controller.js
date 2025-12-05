@@ -2,7 +2,7 @@ let outlineColor = null;
 let fillColor = null;
 let font;
 
-const TIME_SECONDS = 1;
+const TIME_SECONDS = 10;
 const GAME_INSTANCES = [];
 const TOTAL_INSTANCES = 38;
 const REWARD_PER_TASK = 0.016; // $0.016 = 1.6 cents
@@ -298,18 +298,28 @@ function saveLeaderboard() {
 
 function addToLeaderboard(name, accuracies, totalMoney) {
     const avgAccuracy = accuracies.reduce((a, b) => a + b, 0) / accuracies.length;
-    
-    leaderboard.push({
-        name: name,
-        totalMoney: parseFloat(totalMoney.toFixed(3)),
-        avgAccuracy: parseFloat(avgAccuracy.toFixed(2)),
-        accuracies: accuracies.map(a => parseFloat(a.toFixed(2))),
-        timestamp: new Date().toLocaleString()
-    });
-    
-    // keep only top 10
+    // add new entry, or append to existing if name exists
+    const existingIndex = leaderboard.findIndex(entry => entry.name === name);
+    if (existingIndex !== -1) {
+        // update existing entry
+        const existingEntry = leaderboard[existingIndex];
+        existingEntry.totalMoney += totalMoney;
+        existingEntry.accuracies = existingEntry.accuracies.concat(accuracies);
+        const newAvgAccuracy = existingEntry.accuracies.reduce((a, b) => a + b, 0) / existingEntry.accuracies.length;
+        existingEntry.avgAccuracy = parseFloat(newAvgAccuracy.toFixed(2));
+        existingEntry.timestamp = new Date().toLocaleString();
+        leaderboard[existingIndex] = existingEntry;
+    } else {
+        // add new entry
+        leaderboard.push({
+            name: name,
+            totalMoney: parseFloat(totalMoney.toFixed(3)),
+            avgAccuracy: parseFloat(avgAccuracy.toFixed(2)),
+            accuracies: accuracies.map(a => parseFloat(a.toFixed(2))),
+            timestamp: new Date().toLocaleString()
+        });
+    }
     leaderboard.sort((a, b) => b.totalMoney - a.totalMoney);
-    leaderboard = leaderboard.slice(0, 10);
     
     saveLeaderboard();
 }
