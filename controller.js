@@ -11,7 +11,7 @@ const TIME_BONUS_REWARD = 0.005; // $0.005 = 0.5 cents
 const TIME_BONUS_THRESHOLD = 5000; // need 5 seconds left to get bonus (in ms)
 
 // select random images for the instances
-const randomOrder = getRandomNumbersFromRange(TOTAL_INSTANCES, 38);
+const randomOrder = getRandomNumbersFromRange(TOTAL_INSTANCES, TOTAL_INSTANCES);
 for (let i = 0; i < TOTAL_INSTANCES; i++) {
     const imgIndex = randomOrder[i];
     const timer = Math.ceil(TIME_SECONDS - (i / TOTAL_INSTANCES) * 30); // decreasing time
