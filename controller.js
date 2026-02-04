@@ -28,14 +28,14 @@ let isDisplayingResults = false;
 let allInstancesComplete = false;
 
 // leaderboard state
-let playerName = '';
-let nameInputActive = true;
+let playerId = '';
 let leaderboard = [];
 let totalMoneyEarned = 0;
+let isGameStarted = false;
 
 function setup() {
     // load font
-    font = loadFont('GamePocket-Regular.ttf');
+    font = loadFont('fonts/DotGothic16-Regular.ttf');
     textFont(font);
     // display setup
     smooth();
@@ -49,14 +49,17 @@ function setup() {
     fillColor = color(0, 265, 65, 60);
     // load leaderboard from local storage
     loadLeaderboard();
+    // generate random UID
+    playerId = generateRandomUID();
 
 }
 
 function draw() {
     background(0);
     
-    if (nameInputActive) {
-        drawNameInputScreen();
+    if (!isGameStarted) {
+        // show start screen with UID and leaderboard
+        drawStartScreen();
     } else if (allInstancesComplete) {
         // show final results screen
         drawFinalResultsScreen();
@@ -75,15 +78,18 @@ function windowResized() {
 }
 
 function mouseClicked() {
-    if (nameInputActive) return;
-    if (!isDisplayingResults && currentGameState) {
+    if (isGameStarted && !isDisplayingResults && currentGameState) {
         currentGameState.mouseClicked();
     }
 }
 
 function keyPressed() {
-    if (nameInputActive) {
-        handleNameInput();
+    if (!isGameStarted) {
+        // start the game
+        if (key === 'Enter' || key === ' ') {
+            isGameStarted = true;
+            initializeInstance(0);
+        }
         return;
     }
     if (isDisplayingResults) {
@@ -95,46 +101,36 @@ function keyPressed() {
     }
 }
 
-// -------------------- name input --------------------
+// -------------------- start screen --------------------
 
-function drawNameInputScreen() {
+function drawStartScreen() {
     push();
-    textAlign(CENTER, CENTER);
-    
-    drawText('Your Name', windowWidth / 2, windowHeight / 2 - 100, 
-        { size: 48, alignH: CENTER, alignV: CENTER, col: color(255) });
-    
-    // draw input box
-    push();
+    const boxWidth = 700;
+    const boxHeight = 450;
+    const startX = (windowWidth - boxWidth) / 2;
+    const startY = (windowHeight - boxHeight) / 2;
+
     fill(0);
-    stroke(255);
     strokeWeight(3);
-    rect(windowWidth / 2 - 200, windowHeight / 2, 400, 60);
-    
-    fill(255);
-    strokeWeight(0);
-    textAlign(LEFT, CENTER);
-    textSize(36);
-    text(playerName + (frameCount % 30 < 15 ? '|' : ''), windowWidth / 2 - 180, windowHeight / 2 + 30);
-    pop();
-    
-    drawText('Press ENTER to start', windowWidth / 2, windowHeight / 2 + 150, 
-        { size: 24, alignH: CENTER, alignV: CENTER, col: color(255) });
-    
-    pop();
-}
+    rect(startX, startY, boxWidth, boxHeight);
 
-function handleNameInput() {
-    if (key === 'Enter') {
-        if (playerName.trim().length > 0) {
-            nameInputActive = false;
-            initializeInstance(0);
-        }
-    } else if (key === 'Backspace') {
-        playerName = playerName.slice(0, -1);
-    } else if (playerName.length < 15 && key.length === 1) {
-        playerName += key;
-    }
+    // greeting
+    drawText('Hello Worker ' + playerId, windowWidth / 2, 120, 
+        { size: 48, alignH: CENTER, alignV: TOP, col: color(100, 255, 100) });
+    // leaderboard
+    drawLeaderboard(startX, startY + 120, boxWidth, 5);
+
+    // current player info at bottom
+    drawText(playerId, startX + 70, startY + boxHeight - 60, 
+        { size: 20, alignH: LEFT, alignV: TOP, col: color(255, 100, 100) });
+    drawText('$0.000', startX + boxWidth - 70, startY + boxHeight - 60, 
+        { size: 20, alignH: RIGHT, alignV: TOP, col: color(255, 100, 100) });
+
+    // start instruction
+    drawText('Press ENTER to start earning', windowWidth / 2, startY + boxHeight + 40, 
+        { size: 20, alignH: CENTER, alignV: TOP, col: color(200) });
+
+    pop();
 }
 
 // -------------------- instance result screen --------------------
@@ -238,7 +234,7 @@ function handleResultsScreenInput() {
 function drawFinalResultsScreen() {
     push();
     const boxWidth = 700;
-    const boxHeight = 600;
+    const boxHeight = 700;
     const startX = (windowWidth - boxWidth) / 2;
     const startY = (windowHeight - boxHeight) / 2;
 
@@ -250,8 +246,8 @@ function drawFinalResultsScreen() {
     drawText('Game Complete!', windowWidth / 2, startY + 30, 
         { size: 40, alignH: CENTER, alignV: TOP, col: color(100, 255, 100) });
 
-    // player info
-    drawText(`Player: ${playerName}`, windowWidth / 2, startY + 90, 
+    // player UID
+    drawText(`Worker ID: ${playerId}`, windowWidth / 2, startY + 90, 
         { size: 28, alignH: CENTER, alignV: TOP, col: color(200) });
 
     // stats
@@ -263,21 +259,8 @@ function drawFinalResultsScreen() {
     drawText(`Total Earned: $${totalMoneyEarned.toFixed(3)}`, startX + 50, startY + 250, 
         { size: 28, alignH: LEFT, alignV: TOP, col: color(100, 255, 100) });
 
-    // leaderboard
-    drawText('Top 5 Earners', startX + 50, startY + 330, 
-        { size: 26, alignH: LEFT, alignV: TOP, col: color(255) });
-    
-    const rowHeight = 40;
-    for (let i = 0; i < Math.min(5, leaderboard.length); i++) {
-        const entry = leaderboard[i];
-        const isCurrentPlayer = entry.name === playerName;
-        const col = isCurrentPlayer ? color(100, 255, 100) : color(200);
-        
-        drawText(`${i + 1}. ${entry.name}`, startX + 70, startY + 370 + i * rowHeight, 
-            { size: 20, alignH: LEFT, alignV: TOP, col: col });
-        drawText('$' + entry.totalMoney.toFixed(3), startX + boxWidth - 70, startY + 370 + i * rowHeight, 
-            { size: 20, alignH: RIGHT, alignV: TOP, col: col });
-    }
+    // leaderboard using the shared function
+    drawLeaderboard(startX, startY + 320, boxWidth, 5);
 
     pop();
 }
@@ -304,10 +287,10 @@ function saveLeaderboard() {
     localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 }
 
-function addToLeaderboard(name, accuracies, totalMoney) {
+function addToLeaderboard(uid, accuracies, totalMoney) {
     const avgAccuracy = accuracies.reduce((a, b) => a + b, 0) / accuracies.length;
-    // add new entry, or append to existing if name exists
-    const existingIndex = leaderboard.findIndex(entry => entry.name === name);
+    // add new entry, or append to existing if uid exists
+    const existingIndex = leaderboard.findIndex(entry => entry.uid === uid);
     if (existingIndex !== -1) {
         // update existing entry
         const existingEntry = leaderboard[existingIndex];
@@ -320,7 +303,7 @@ function addToLeaderboard(name, accuracies, totalMoney) {
     } else {
         // add new entry
         leaderboard.push({
-            name: name,
+            uid: uid,
             totalMoney: parseFloat(totalMoney.toFixed(3)),
             avgAccuracy: parseFloat(avgAccuracy.toFixed(2)),
             accuracies: accuracies.map(a => parseFloat(a.toFixed(2))),
@@ -348,12 +331,41 @@ function drawText(txt, x, y, opts = {}) {
     pop();
 }
 
+function generateRandomUID() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let uid = '#';
+    for (let i = 0; i < 8; i++) {
+        uid += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return uid;
+}
+
+function drawLeaderboard(startX, startY, boxWidth, rowsToShow = 5) {
+    // draws the leaderboard with specified rows
+    drawText('Top Earners', startX + 50, startY, 
+        { size: 26, alignH: LEFT, alignV: TOP, col: color(255) });
+    
+    const rowHeight = 40;
+    for (let i = 0; i < Math.min(rowsToShow, leaderboard.length); i++) {
+        const entry = leaderboard[i];
+        const isCurrentPlayer = entry.uid === playerId;
+        const col = isCurrentPlayer ? color(100, 255, 100) : color(200);
+        
+        drawText(`${i + 1}. ${entry.uid}`, startX + 70, startY + 40 + i * rowHeight, 
+            { size: 20, alignH: LEFT, alignV: TOP, col: col });
+        drawText('$' + entry.totalMoney.toFixed(3), startX + boxWidth - 70, startY + 40 + i * rowHeight, 
+            { size: 20, alignH: RIGHT, alignV: TOP, col: col });
+    }
+}
+
 function drawHitCounter() {
     // show index+1 of current game instance in top-right corner
     const hitText = 'Task: ' + (currentInstanceIndex + 1);
     const earnings = '$' + totalMoneyEarned.toFixed(3);
+    const uidText = 'ID: ' + playerId;
     drawText(hitText, windowWidth - 70, 40, { size: 48, alignH: RIGHT, alignV: TOP, col: color(255) });
     drawText(earnings, windowWidth - 70, 110, { size: 36, alignH: RIGHT, alignV: TOP, col: color(100, 255, 100) });
+    drawText(uidText, windowWidth - 70, 170, { size: 20, alignH: RIGHT, alignV: TOP, col: color(150) });
 }
 
 function getRandomNumbersFromRange(quantity, max){
@@ -401,7 +413,7 @@ function onPlayerExit() {
     allInstancesComplete = true;
     
     // add to leaderboard with current earnings
-    addToLeaderboard(playerName, resultsLog, totalMoneyEarned);
+    addToLeaderboard(playerId, resultsLog, totalMoneyEarned);
 }
 
 function onAllInstancesComplete() {
@@ -412,7 +424,7 @@ function onAllInstancesComplete() {
     allInstancesComplete = true;
     
     // add to leaderboard
-    addToLeaderboard(playerName, resultsLog, totalMoneyEarned);
+    addToLeaderboard(playerId, resultsLog, totalMoneyEarned);
 }
 
 // -------------------- GameInstance class --------------------

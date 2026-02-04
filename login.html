@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>linusziegler</title>
+</head>
+<body>
+    <div class="main-w">
+        <h1>Welcome</h1>
+        <p>Congratulations on making it through our rigourous screening process.</p>
+        <p>Enter your name and date of birth below to complete employee registration...</p>
+        <!-- login field with name and date of birth, which ignores the input and just links to game.html -->
+        <form action="game.html" method="get">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br>
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob">
+            <br>
+            <input type="submit" value="Log In">
+        </form>
+    </div>
+</body>
+</html>

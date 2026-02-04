@@ -1,12 +1,176 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  color: black;
-
-  cursor: none;
+@font-face {
+    font-family: "DotGothic16";
+    src: url('fonts/DotGothic16-Regular.ttf') format('truetype');
 }
+
+@font-face {
+    font-family: "GamePocket-Regular";
+    src: url('fonts/GamePocket-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Led-Display";
+    src: url('fonts/The Led Display St.ttf') format('truetype');
+}
+
+:root {
+    font-size: 12px;
+}
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    background-color: black;
+    color: white;
+    font-family: 'DotGothic16';
+    font-size: 1rem;
+
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+
+    scroll-behavior: smooth;
+}
+
 
 canvas {
   display: block;
   color: black;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+    padding-bottom: .5rem;
+    font-size: 1.5rem;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 1rem;
+    font-family: "Led-Display";
+    font-size: 10.5rem;
+    font-weight: normal;
+}
+
+h2 {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 2rem;
+    font-size: 2.5rem;
+
+    text-decoration: underline;
+    text-underline-offset: 1rem;
+}
+
+
+.main-w {
+    position: relative;
+    width: 100vw;
+    height: 80vh;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    padding: 2rem;
+}
+
+/* index */
+
+.click {
+    position: fixed;
+    top: 10rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: 10vh;
+}
+.work {
+    position: fixed;
+    bottom: 10rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: 10vh;
+}
+.click img, .work img {
+    width: auto;
+    height: 100%;
+    filter: invert(1);
+}
+
+.moneystack {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-44%, -50%);
+    width: 60vw;
+    height: auto;
+
+    cursor: pointer;
+}
+.moneystack img {
+    width: 100%;
+    height: auto;
+}
+
+/* login */
+
+form {
+    padding-top: 4rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: .5rem;
+    font-family: 'DotGothic16';
+
+
+    width: 30rem;
+    height: auto;
+}
+
+form label {
+    font-size: 1.5rem;
+}
+
+form input {
+    font-size: 1.5rem;
+    padding: 1rem;
+    background-color: black;
+    color: white;
+    border: 2px solid white;
+    outline: none;
+    font-family: 'DotGothic16';
+}
+
+form button {
+    font-size: 1.5rem;
+    padding: 1rem;
+
+    background-color: white;
+    color: black;
+    border: none;
+    font-family: 'DotGothic16';
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #e0e0e0;
+}
+
+.leaderboard-w {
+    width: 50%;
+    height: 100%;
+
+    padding: 2rem;
+
 }
