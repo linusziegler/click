@@ -6,9 +6,13 @@ const TIME_SECONDS = 30;
 const GAME_INSTANCES = [];
 const TOTAL_INSTANCES = 50;
 const REWARD_PER_TASK = 0.016; // $0.016 = 1.6 cents
-const ACCURACY_THRESHOLD = 85; // need 85% to get paid
+const ACCURACY_THRESHOLD = 80; // need 80% to get paid
 const TIME_BONUS_REWARD = 0.005; // $0.005 = 0.5 cents
 const TIME_BONUS_THRESHOLD = 5000; // need 5 seconds left to get bonus (in ms)
+
+// Accuracy calculation weights (for weighted IoU)
+const WEIGHT_FALSE_NEGATIVES = 1.0; // penalty for missing pixels from mask
+const WEIGHT_FALSE_POSITIVES = .8; // penalty for extra pixels in polygon
 
 // select random images for the instances
 const randomOrder = getRandomNumbersFromRange(TOTAL_INSTANCES, TOTAL_INSTANCES);
@@ -26,6 +30,7 @@ let currentGameState = null;
 let displayResultsTime = 0;
 let isDisplayingResults = false;
 let allInstancesComplete = false;
+let finalResultsStartTime = null;
 
 // leaderboard state
 let playerId = '';
@@ -63,6 +68,18 @@ function draw() {
     } else if (allInstancesComplete) {
         // show final results screen
         drawFinalResultsScreen();
+        if (finalResultsStartTime === null) {
+            finalResultsStartTime = millis();
+        }
+        // check if 15 seconds have passed, then redirect
+        const elapsedTime = millis() - finalResultsStartTime;
+        // draw countdown to redirect
+        const countdown = max(0, 15 - floor(elapsedTime / 1000));
+        drawText(`Restarting in ${countdown}s`, windowWidth / 2, windowHeight - 100, 
+            { size: 20, alignH: CENTER, alignV: TOP, col: color(200) });
+        if (elapsedTime > 15000) {
+            window.location.href = 'index.html';
+        }
     } else if (isDisplayingResults) {
         // show instance result with option to continue or exit
         drawInstanceResultScreen();
@@ -112,7 +129,7 @@ function drawStartScreen() {
 
     fill(0);
     strokeWeight(3);
-    rect(startX, startY, boxWidth, boxHeight);
+    // rect(startX, startY, boxWidth, boxHeight);
 
     // greeting
     drawText('Hello Worker ' + playerId, windowWidth / 2, 120, 
@@ -150,7 +167,7 @@ function drawInstanceResultScreen() {
     fill(0);
     stroke(255);
     strokeWeight(3);
-    rect(startX, startY, boxWidth, boxHeight);
+    // rect(startX, startY, boxWidth, boxHeight);
 
     // title
     drawText(`Instance ${currentInstanceIndex + 1} Complete`, 
@@ -240,7 +257,7 @@ function drawFinalResultsScreen() {
 
     fill(0);
     strokeWeight(3);
-    rect(startX, startY, boxWidth, boxHeight);
+    // rect(startX, startY, boxWidth, boxHeight);
 
     // title
     drawText('Game Complete!', windowWidth / 2, startY + 30, 
@@ -421,8 +438,7 @@ function onAllInstancesComplete() {
     console.log('Results:', resultsLog);
     console.log('Total Money Earned:', totalMoneyEarned);
     currentGameState = null;
-    allInstancesComplete = true;
-    
+    allInstancesComplete = true;    
     // add to leaderboard
     addToLeaderboard(playerId, resultsLog, totalMoneyEarned);
 }
@@ -691,11 +707,12 @@ class GameInstance {
             return (polyWhiteCount === 0) ? 100 : 0;
         }
 
-        const maskBlackCount = totalPixels - maskWhiteCount;
-        const falsePositive = polyWhiteCount - overlapCount;
-        let rawScore = (overlapCount / maskWhiteCount) - (falsePositive / maskBlackCount);
-        const accuracy = constrain(max(rawScore, 0) * 100, 0, 100);
-        return accuracy;
+        // Weighted Intersection over Union
+        const falseNegatives = maskWhiteCount - overlapCount; // pixels in mask but not in polygon
+        const falsePositives = polyWhiteCount - overlapCount; // pixels in polygon but not in mask
+        const weightedUnion = overlapCount + WEIGHT_FALSE_NEGATIVES * falseNegatives + WEIGHT_FALSE_POSITIVES * falsePositives;
+        const accuracy = (weightedUnion > 0) ? (overlapCount / weightedUnion) * 100 : 0;
+        return constrain(accuracy, 0, 100);
     }
 
     drawAccuracy() {

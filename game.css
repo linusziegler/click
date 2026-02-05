@@ -1,0 +1,16 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: none;
+
+}
+
+canvas {
+  display: block;
+  color: black;
+}
