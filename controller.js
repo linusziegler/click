@@ -16,7 +16,7 @@ const WEIGHT_FALSE_NEGATIVES = 1.0; // penalty for missing pixels from mask
 const WEIGHT_FALSE_POSITIVES = .8; // penalty for extra pixels in polygon
 
 // Level system
-const IMAGES_PER_LEVEL = 10; // complete 10 images to advance one level
+const IMAGES_PER_LEVEL = 7; // complete 7 images to advance one level
 const MAX_LEVEL = 5;
 
 // select random images for the instances
