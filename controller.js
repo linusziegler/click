@@ -148,6 +148,13 @@ function keyPressed() {
         }
         return;
     }
+    if (allInstancesComplete) {
+        // on final screen, pressing enter redirects immediately
+        if (key === 'Enter' || key === ' ') {
+            window.location.href = 'index.html';
+        }
+        return;
+    }
     if (!isGameStarted) {
         // start the game
         if (key === 'Enter' || key === ' ') {
