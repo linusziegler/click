@@ -411,8 +411,8 @@ function saveLeaderboard() {
 
 function addToLeaderboard(uid, accuracies, totalMoney) {
     const avgAccuracy = accuracies.reduce((a, b) => a + b, 0) / accuracies.length;
-    // calculate level based on total images completed
-    const level = Math.min(Math.floor(accuracies.length / IMAGES_PER_LEVEL) + 1, MAX_LEVEL);
+    // calculate level
+    const level = Math.min(Math.floor(successfulInstances / IMAGES_PER_LEVEL) + 1, MAX_LEVEL);
     
     // add new entry, or append to existing if uid exists
     const existingIndex = leaderboard.findIndex(entry => entry.uid === uid);
