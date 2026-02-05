@@ -32,6 +32,81 @@ body {
     scroll-behavior: smooth;
 }
 
+/* Lockscreen styles */
+body.lockscreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.lockscreen-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lockscreen-bg {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.lockscreen-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.lockscreen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.lockscreen-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 60px 20px;
+}
+
+.lockscreen-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.lockscreen-time {
+    font-size: 120px;
+    font-weight: bold;
+    line-height: 1;
+    color: white;
+}
+
+.lockscreen-date {
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
 
 canvas {
   display: block;
@@ -105,21 +180,6 @@ h2 {
     width: auto;
     height: 100%;
     filter: invert(1);
-}
-
-.moneystack {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-44%, -50%);
-    width: 60vw;
-    height: auto;
-
-    cursor: pointer;
-}
-.moneystack img {
-    width: 100%;
-    height: auto;
 }
 
 /* login */

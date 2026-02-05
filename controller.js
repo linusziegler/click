@@ -361,24 +361,41 @@ function drawLevelUnlockScreen() {
     push();
     background(0);
     
-    // title text
-    drawText(`Level ${unlockedLevel} Unlocked!`, windowWidth / 2, 120, 
-        { size: 84, alignH: CENTER, alignV: CENTER, col: color(100, 255, 100) });
-    
-    // draw money stacks (1 to unlockedLevel)
+    // draw GIF as background (tiled or centered)
     if (moneyStackImage) {
-        const stackSize = 300;
-        const spacing = 0;
-        const totalWidth = unlockedLevel * (stackSize + spacing) - spacing;
-        const startX = (windowWidth - totalWidth) / 2;
-        
         push();
         imageMode(CENTER);
-        for (let i = 0; i < unlockedLevel; i++) {
-            image(moneyStackImage, startX + i * (stackSize + spacing) + stackSize / 2, windowHeight / 2 + 100, stackSize, stackSize);
-        }
+        // draw GIF as background covering the screen
+        let scale = max(windowWidth / moneyStackImage.width, windowHeight / moneyStackImage.height);
+        image(moneyStackImage, windowWidth / 2, windowHeight / 2, moneyStackImage.width * scale, moneyStackImage.height * scale);
         pop();
     }
+    
+    // semi-transparent overlay to make text readable
+    fill(0, 0, 0, 100);
+    rect(0, 0, windowWidth, windowHeight);
+    
+    // clock and date on top (like a lockscreen)
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const timeStr = `${hours}:${minutes}`;
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const dateStr = `${dayNames[now.getDay()]}, ${monthNames[now.getMonth()]} ${now.getDate()}`;
+    
+    drawText(timeStr, windowWidth / 2, 80, 
+        { size: 72, alignH: CENTER, alignV: TOP, col: color(255) });
+    drawText(dateStr, windowWidth / 2, 160, 
+        { size: 28, alignH: CENTER, alignV: TOP, col: color(200) });
+    
+    // level unlock text in center
+    drawText(`Level ${unlockedLevel} Unlocked!`, windowWidth / 2, windowHeight / 2 - 80, 
+        { size: 84, alignH: CENTER, alignV: CENTER, col: color(100, 255, 100) });
+    
+    // hint text at bottom
+    drawText('Press ENTER to continue', windowWidth / 2, windowHeight - 100, 
+        { size: 24, alignH: CENTER, alignV: TOP, col: color(200) });
     
     pop();
 }
