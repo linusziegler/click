@@ -1,3 +1,4 @@
+// activate live server and start kiosk mode using frefox --kiosk http://127.0.0.1:5500/
 let outlineColor = null;
 let fillColor = null;
 let font;
@@ -226,7 +227,7 @@ function drawInstanceResultScreen() {
 
     // progress to next level
     if (playerLevel < MAX_LEVEL) {
-        if (successesToNextLevel === 0) {
+        if (successesToNextLevel === 0 && reward > 0) {
             drawText('Level Up!', startX + boxWidth / 2, startY + 410, 
                 { size: 24, alignH: CENTER, alignV: TOP, col: color(100, 255, 100) });
         } else {
@@ -248,7 +249,7 @@ function drawInstanceResultScreen() {
     stroke(100, 255, 100);
     strokeWeight(2);
     rect(startX + 50, startY + boxHeight - 60, 200, 60);
-    drawText('Continue (C)', startX + 150, startY + boxHeight - 30, 
+    drawText('Continue (ENTER)', startX + 150, startY + boxHeight - 30, 
         { size: 20, alignH: CENTER, alignV: CENTER, col: color(100, 255, 100) });
     
     // exit button
@@ -264,7 +265,7 @@ function drawInstanceResultScreen() {
 }
 
 function handleResultsScreenInput() {
-    if (key === 'c' || key === 'C' || key === 'Space') {
+    if (key === 'Enter' || key === ' ') {
         // continue to next instance
         isDisplayingResults = false;
         currentInstanceIndex++;
