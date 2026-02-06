@@ -5,7 +5,7 @@ let font;
 
 const TIME_SECONDS = 30;
 const GAME_INSTANCES = [];
-const TOTAL_INSTANCES = 50;
+const TOTAL_INSTANCES = 54;
 const REWARD_PER_TASK = 0.016; // $0.016 = 1.6 cents
 const ACCURACY_THRESHOLD = 80; // need 80% to get paid
 const TIME_BONUS_REWARD = 0.005; // $0.005 = 0.5 cents

@@ -38,15 +38,6 @@ body {
     scroll-behavior: smooth;
 }
 
-/* hide scrollbars globally */
-div::-webkit-scrollbar {
-    display: none;
-}
-div {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
 a {
     color: inherit;
     text-decoration: none;
@@ -75,7 +66,7 @@ body.lockscreen {
 .lockscreen-bg {
     position: absolute;
     top: 0;
-    left: 80px;
+    left: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -254,7 +245,7 @@ body.desktop {
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    background-color: var(--color-bg);
+    background: var(--color-bg) url('moneystack.png') center/cover no-repeat;
     overflow: hidden;
 }
 
@@ -322,7 +313,6 @@ body.desktop {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: .5rem;
     cursor: pointer;
     user-select: none;
 }
@@ -357,6 +347,12 @@ body.desktop {
     align-items: center;
     justify-content: center;
     font-size: 2.75rem;
+}
+.icon-rect img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    filter:grayscale(100%);
 }
 
 .icon-rect:active {
@@ -429,17 +425,12 @@ body.desktop {
 }
 
 .window-content {
-    height: 100%;
-    padding: 1.2rem 0.5rem;
-    overflow: scroll;
+    flex: 1;
+    padding: 0.75rem;
+    overflow-y: auto;
     background: var(--color-fg);
-    border: 0.01rem solid var(--color-light) inset;
-}
-.window-content p {
-    padding: 0.25rem 0.5rem;
-    color: var(--color-text);
-    font-size: 1.25rem;
-    line-height: 2rem;
+    border: 0.083rem solid var(--color-light) inset;
+    color: var(--color-text)
 }
 
 .folder-item {
@@ -447,7 +438,7 @@ body.desktop {
     color: var(--color-text);
     font-size: 1.25rem;
     cursor: pointer;
-    border: 0.01rem solid transparent;
+    border: 0.083rem solid transparent;
 }
 
 .folder-item:hover {

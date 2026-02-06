@@ -64,7 +64,7 @@
     </div>
     <div class="folder-window" id="info-window" style="display: none;">
         <div class="window-titlebar">
-            <span class="window-title">📄 info</span>
+            <span class="window-title">📄 Info</span>
             <button class="window-close">✕</button>
         </div>
         <div class="window-content">
@@ -99,7 +99,7 @@
         <div class="menubar-right">
             <div class="menubar-clock">
                 <span class="clock" id="clock">00:00</span>
-                <span class="clock" id="date" style="font-size: 12px;">Monday, January 1</span>
+                <span class="clock" id="date">Monday, January 1</span>
             </div>
         </div>
     </div>
@@ -110,7 +110,8 @@
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
 
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -138,9 +139,9 @@
         });
 
         // Trash icon click
-        document.getElementById('trash-icon').addEventListener('click', function () {
-            window.location.href = '/index.html';
-        });
+        // document.getElementById('trash-icon').addEventListener('click', function () {
+        //     window.location.href = '/index.html';
+        // });
 
         // Folder window close button
         document.querySelector('#reading-list-window .window-close').addEventListener('click', function () {
