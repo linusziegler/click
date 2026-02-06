@@ -15,7 +15,7 @@
 :root {
     font-size: 14px;
     --color-bg: #000000;
-    --color-fg: #b9b9b9;
+    --color-fg: #adadad;
     --color-text: #000000;
     --color-light: #dfdfdf;
     --color-dark: var(--color-bg);
@@ -245,7 +245,7 @@ body.desktop {
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    background: var(--color-bg) url('moneystack.png') center/cover no-repeat;
+    background: var(--color-bg) url('moneystack.gif') center/cover no-repeat;
     overflow: hidden;
 }
 
