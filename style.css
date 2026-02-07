@@ -387,6 +387,9 @@ body.desktop {
     flex-direction: column;
     z-index: 100;
 }
+#info-window {
+    height: 70vh;
+}
 
 .window-titlebar {
     display: flex;
@@ -427,7 +430,7 @@ body.desktop {
 .window-content {
     flex: 1;
     padding: 0.75rem;
-    overflow-y: auto;
+    overflow: hidden;
     background: var(--color-fg);
     border: 0.083rem solid var(--color-light) inset;
     color: var(--color-text)
