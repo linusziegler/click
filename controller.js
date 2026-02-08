@@ -138,6 +138,12 @@ function mouseClicked() {
 }
 
 function keyPressed() {
+    // ESC key closes game and returns to desktop
+    if (key === 'Escape' || keyCode === ESCAPE) {
+        window.location.href = 'desktop.html';
+        return;
+    }
+    
     if (isDisplayingLevelUnlock) {
         // skip level unlock screen with Enter
         if (key === 'Enter' || key === ' ') {

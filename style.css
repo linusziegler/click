@@ -340,13 +340,13 @@ body.desktop {
 .icon-rect {
     width: 6rem;
     height: 6rem;
-    border: 0.25rem solid;
+    /* border: 0.25rem solid;
     border-color: var(--color-light) var(--color-dark) var(--color-dark) var(--color-light);
-    background: var(--color-fg);
+    background: var(--color-fg); */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.75rem;
+    font-size: 3rem;
 }
 .icon-rect img {
     width: 80%;
@@ -356,7 +356,7 @@ body.desktop {
 }
 
 .icon-rect:active {
-    border-color: var(--color-dark) var(--color-light) var(--color-light) var(--color-dark);
+    /* border-color: var(--color-dark) var(--color-light) var(--color-light) var(--color-dark); */
 }
 
 .icon-label {
