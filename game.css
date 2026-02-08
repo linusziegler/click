@@ -8,6 +8,14 @@ body {
     -webkit-user-select: none;
     cursor: none;
 
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.PolyMasking {
+    flex: 1;
 }
 
 canvas {

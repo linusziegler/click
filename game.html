@@ -4,15 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Sketch</title>
+    <title>Game</title>
 
+    <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" type="text/css" href="game.css">
 
     <script src="libraries/p5.min.js"></script>
   </head>
 
   <body>
+    <!-- Game Titlebar -->
+    <div class="window-titlebar">
+      <span class="window-title">Game</span>
+      <button class="window-close" id="close-button">✕</button>
+    </div>
+    
     <div class="PolyMasking"></div>
     <script src="controller.js"></script>
+    <script>
+      // Close button functionality
+      document.getElementById('close-button').addEventListener('click', function() {
+        window.location.href = 'desktop.html';
+      });
+    </script>
   </body>
 </html>
