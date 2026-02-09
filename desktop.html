@@ -74,6 +74,16 @@
         </div>
     </div>
 
+    <div class="folder-window" id="trash-window" style="display: none;">
+        <div class="window-titlebar">
+            <span class="window-title">Trash</span>
+            <button class="window-close">✕</button>
+        </div>
+        <div class="window-content">
+            <img src="trashWeb.png" alt="">
+        </div>
+    </div>
+
     <!-- Bottom Menu Bar -->
     <div class="desktop-menubar">
         <div class="menubar-left">
@@ -121,10 +131,11 @@
             folderWindow.style.display = folderWindow.style.display === 'none' ? 'flex' : 'none';
         });
 
-        // Trash icon click
-        // document.getElementById('trash-icon').addEventListener('click', function () {
-        //     window.location.href = '/index.html';
-        // });
+        // trash icon click
+        document.getElementById('trash-icon').addEventListener('click', function () {
+            const folderWindow = document.getElementById('trash-window');
+            folderWindow.style.display = folderWindow.style.display === 'none' ? 'flex' : 'none';
+        });
 
         // Folder window close button
         document.querySelector('#reading-list-window .window-close').addEventListener('click', function () {
@@ -134,6 +145,10 @@
         // Folder window close button
         document.querySelector('#info-window .window-close').addEventListener('click', function () {
             document.getElementById('info-window').style.display = 'none';
+        });
+        // trash window close button
+        document.querySelector('#trash-window .window-close').addEventListener('click', function () {
+            document.getElementById('trash-window').style.display = 'none';
         });
     </script>
 </body>
